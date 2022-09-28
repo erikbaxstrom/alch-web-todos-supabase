@@ -31,22 +31,31 @@ export async function signOutUser() {
 
 export async function createTodo(todo) {
     // > Part A: Insert the todo in supabase, returns a single row
+    return await client.from('todos').insert(todo).single();
 }
 
 export async function getTodos() {
     // > Part B: Get all todos for this user from supabase
+    const response = await client.from('todos').select('*');
+    return response;
 }
 
 export async function completeTodo(id) {
     // > Part C: call update (set complete to true) for the todo that
     // matches the correct id. Returns a single record:
+    const response = await client
+        .from('todos')
+        .update({ complete: true })
+        .eq('id', id)
+        .single();
+    return response;
 }
 
 export async function deleteAllTodos() {
     const user = getUser();
 
     // > Part D: delete all todos for this user in supabase:
-
+    return await client.from('todos').delete().eq('user_id', user.id);
     // Supabase doesn't allow deleting without a where clause,
     // which is a good thing it most cases because we generally
     // don't want to delete every single row from the database.
