@@ -36,6 +36,10 @@ export async function createTodo(todo) {
 
 export async function getTodos() {
     // > Part B: Get all todos for this user from supabase
+    console.log('getting');
+    const response = await client.from('todos').select('*');
+    console.log('response', response);
+    return response;
 }
 
 export async function completeTodo(id) {
