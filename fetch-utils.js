@@ -36,15 +36,19 @@ export async function createTodo(todo) {
 
 export async function getTodos() {
     // > Part B: Get all todos for this user from supabase
-    console.log('getting');
     const response = await client.from('todos').select('*');
-    console.log('response', response);
     return response;
 }
 
 export async function completeTodo(id) {
     // > Part C: call update (set complete to true) for the todo that
     // matches the correct id. Returns a single record:
+    const response = await client
+        .from('todos')
+        .update({ complete: true })
+        .eq('id', id)
+        .single();
+    return response;
 }
 
 export async function deleteAllTodos() {

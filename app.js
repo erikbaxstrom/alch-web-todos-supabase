@@ -2,7 +2,7 @@
 // this will check if we have a user and set signout link if it exists
 import './auth/user.js';
 // Part A: import create todo
-import { createTodo, getTodos } from './fetch-utils.js';
+import { createTodo, getTodos, completeTodo } from './fetch-utils.js';
 // Part B: import get todos
 // Part C: import complete todos
 // Part D: import delete all function
@@ -41,7 +41,7 @@ addTodoForm.addEventListener('submit', async (e) => {
     };
 
     // > Part A: Call the function to create a todo, passing in "newTodo":
-    const response = await createTodo(newTodo); // ???
+    const response = await createTodo(newTodo);
     error = response.error;
     const todo = response.data;
 
@@ -86,12 +86,23 @@ function displayTodos() {
         todoList.append(todoEl);
 
         // > Part C: Add a click event listener for the todoEl
-        //      - call the async supabase function to delete all todos
-        //        and get the response
-        //      - if there's an error, set error state and call displayError
-        //      - otherwise:
-        //          - find the index of todo in todos
-        //          - update that index of todos with the response data
-        //          - redisplay the todos
+        todoEl.addEventListener('click', async () => {
+            //      - call the async supabase function to delete all todos
+            //        and get the response
+            const response = await completeTodo(todo.id);
+            error = response.error;
+            //      - if there's an error, set error state and call displayError
+            if (error) {
+                displayError();
+            } else {
+                //      - otherwise:
+                //          - find the index of todo in todos
+                const index = todos.indexOf(todo);
+                //          - update that index of todos with the response data
+                todos[index] = response.data;
+                //          - redisplay the todos
+                displayTodos();
+            }
+        });
     }
 }
